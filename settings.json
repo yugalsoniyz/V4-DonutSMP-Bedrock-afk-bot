@@ -1,10 +1,10 @@
 {
   "server": {
-    "host": "play.example.com",
+    "host": "donutsmp.net",
     "port": 19132
   },
   "bot": {
-    "username": "YourXboxGamertag"
+    "username": "yugal x9"
   },
   "reconnect": {
     "enabled": true,
