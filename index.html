@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bedrock Bot Status</title>
+<style>
+body{margin:0;background:#0d1117;color:#c9d1d9;font-family:Arial,sans-serif}
+.wrap{max-width:850px;margin:35px auto;padding:20px}
+h1{font-size:26px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px}
+.label{font-size:12px;color:#8b949e;margin-bottom:7px}.value{font-size:18px}
+.mono{font-family:monospace}.small{color:#8b949e;font-size:13px;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>🤖 Bedrock Bot Status</h1>
+<div class="grid">
+  <div class="card"><div class="label">STATUS</div><div id="status" class="value">Loading...</div></div>
+  <div class="card"><div class="label">USERNAME</div><div id="username" class="value mono">-</div></div>
+  <div class="card"><div class="label">SERVER</div><div id="server" class="value mono">-</div></div>
+  <div class="card"><div class="label">UPTIME</div><div id="uptime" class="value">-</div></div>
+  <div class="card"><div class="label">PLAYER COORDINATES</div><div id="coords" class="value mono">Waiting...</div></div>
+  <div class="card"><div class="label">BLOCK NAME</div><div id="blockName" class="value mono">Waiting for world data...</div></div>
+  <div class="card"><div class="label">BLOCK COORDINATES</div><div id="block" class="value mono">Waiting...</div></div>
+  <div class="card"><div class="label">RECONNECTS</div><div id="reconnects" class="value">0</div></div>
+  <div class="card"><div class="label">LAST EVENT</div><div id="event" class="value">-</div></div>
+</div>
+<div class="small">
+The block name is read from the Bedrock world/chunk data loaded around the bot.
+</div>
+</div>
+<script>
+function fmt(sec){
+  sec=Math.floor(sec||0);
+  const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;
+  return `${h}h ${m}m ${s}s`;
+}
+async function update(){
+  try{
+    const r=await fetch('/api/status',{cache:'no-store'});
+    const d=await r.json();
+
+    document.getElementById('status').textContent=d.status||'-';
+    document.getElementById('username').textContent=d.username||'-';
+    document.getElementById('server').textContent=d.server||'-';
+    document.getElementById('uptime').textContent=fmt(d.uptime);
+    document.getElementById('reconnects').textContent=d.reconnects??0;
+    document.getElementById('event').textContent=d.lastEvent||'-';
+
+    if(d.position){
+      document.getElementById('coords').textContent =
+        `X ${d.position.x.toFixed(2)}  Y ${d.position.y.toFixed(2)}  Z ${d.position.z.toFixed(2)}`;
+    }
+
+    document.getElementById('blockName').textContent =
+      d.blockDisplayName
+        ? `${d.blockDisplayName} (${d.blockName || 'unknown'})`
+        : 'Waiting for world data...';
+
+    if(d.blockPosition){
+      document.getElementById('block').textContent =
+        `X ${d.blockPosition.x}  Y ${d.blockPosition.y}  Z ${d.blockPosition.z}`;
+    }
+  }catch(e){}
+}
+update();
+setInterval(update,2000);
+</script>
+</body>
+</html>

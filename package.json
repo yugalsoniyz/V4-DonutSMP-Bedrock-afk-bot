@@ -1,0 +1,15 @@
+{
+  "name": "bedrock-afk-bot",
+  "version": "1.0.0",
+  "description": "Lightweight Minecraft Bedrock client with web dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "prismarine-bedrock": "github:deepslate-bedrock/prismarine-bedrock"
+  }
+}

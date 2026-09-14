@@ -1,0 +1,17 @@
+{
+  "server": {
+    "host": "play.example.com",
+    "port": 19132
+  },
+  "bot": {
+    "username": "YourXboxGamertag"
+  },
+  "reconnect": {
+    "enabled": true,
+    "initialDelayMs": 5000,
+    "maxDelayMs": 60000
+  },
+  "dashboard": {
+    "enabled": true
+  }
+}
